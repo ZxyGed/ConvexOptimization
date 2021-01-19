@@ -1,0 +1,36 @@
+\documentclass[11pt]{ctexart}         %编辑中文文档
+\usepackage{amsmath,amsfonts,amssymb,nccmath} %数学工具包
+\usepackage[margin=1in]{geometry}     %页面设置，边距，页幅大小等
+\usepackage{enumerate}                %有序列表工具包
+%\usepackage{hyperref}                 %方便设置超链接
+\usepackage{fancyhdr}                 %设置页眉页脚
+\usepackage{float}                    %设置图片环绕样式
+\usepackage{graphicx}                 %插入图片
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{adjustbox}
+\usepackage{pifont}
+\usepackage{extarrows}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{subfigure}
+\usepackage{etoolbox}
+
+\begin{document}
+	% 必须在正文区设置
+	\setlength{\belowdisplayskip}{6pt}%公式后的距离
+	\setlength{\abovedisplayskip}{6pt}%公式前的距离
+	\setlength{\belowdisplayshortskip}{0pt}%如果公式后的句子很短，将被采用[只对equation环境有效]
+	\setlength{\abovedisplayshortskip}{0pt}%如果公式前的句子很短，将被采用	[只对equation环境有效]
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics{imgs/flow.eps}
+	\end{figure}
+	\hrule height 4pt
+	输入，包含m个数据的X，
+	\begin{enumerate}[itemsep=0pt,parsep=0pt,topsep=0pt]
+		\item
+	\end{enumerate}
+	\hrule height 4pt
+\end{document}

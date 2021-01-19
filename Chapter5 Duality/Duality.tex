@@ -1,0 +1,130 @@
+\documentclass[11pt]{ctexart}         %编辑中文文档
+\usepackage{amsmath,amsfonts,amssymb,nccmath} %数学工具包
+\usepackage[margin=1in]{geometry}     %页面设置，边距，页幅大小等
+\usepackage{enumerate}                %有序列表工具包
+%\usepackage{hyperref}                 %方便设置超链接
+\usepackage{fancyhdr}                 %设置页眉页脚
+\usepackage{float}                    %设置图片环绕样式
+\usepackage{graphicx}                 %插入图片
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{adjustbox}
+\usepackage{pifont}
+\usepackage{extarrows}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{subfigure}
+\usepackage{etoolbox}
+
+\CTEXsetup[format={\Large\bfseries}]{section} %设置section标题左对齐，挺迷的
+\usepackage[
+	pdfstartview=FitH,
+	CJKbookmarks=true,
+	bookmarksnumbered=true,
+	bookmarksopen=true,
+	colorlinks,
+	pdfborder=001,
+	linkcolor=blue,
+	anchorcolor=blue,
+	citecolor=blue,
+]{hyperref}
+\hypersetup{hidelinks} %去除目录项以及超链接的方框
+
+\pagestyle{fancy}                     %设置页眉页脚
+\fancyhead{}                          %清除默认页眉
+\fancyfoot{}                          %清除默认页脚
+\fancyhead[L]{\slshape{Convex Optimization}}%设置自定义页眉左侧，slshape表斜体	
+\fancyhead[R]{\slshape Chapter5 Duality}	
+\fancyfoot[C]{\thepage}
+\parindent 0ex %latex首段不缩进，其后段落缩进，\parindent为其后段落缩进的长度
+\setlength{\parskip}{1em}  %段落间距
+\renewcommand{\baselinestretch}{1.5}  %设置行距
+\renewcommand{\vec}[1]{\boldsymbol{#1}}  %设置粗体向量
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}%表格内换行
+
+\newenvironment{myenumerate}{\begin{enumerate}[itemsep=0pt,parsep=0pt,topsep=0pt]}{\end{enumerate}}
+\newcommand{\liset}{itemsep=0pt,parsep=0pt,topsep=0pt}
+\newcommand{\rebacklinespread}[1][-12pt]{\vspace{#1}}
+\newcommand{\oneline}[1][12pt]{\vspace{#1}}
+\newcommand{\premise}[1][dom\ f]{\forall\ x,y\in #1,\ \theta\in [0,1]}
+\newcommand{\linearcombine}[2]{\theta #1+(1-\theta)#2}
+\newcommand{\ii}{\,\in\,}
+\newcommand{\dom}[1]{$dom\ #1$}
+\newcommand{\rs}[2][R]{#1^{#2}} %Rspace or matrix space
+\newcommand{\rl}[2][R]{#1_{#2}} %Rlimit or matrix space
+\newcommand{\rls}[3][R]{#1_{#2}^{#3}} %R limit space or matrix limit space
+
+\newcommand{\trans}[1]{#1^T#1} %transpose
+\newcommand{\ftrans}[1]{\left(#1\right)^T#1} %fraction transpose
+\newcommand{\mirror}[2]{#1#2#1}
+\newcommand{\ba}[1]{\begin{align*}#1\end{align*}}
+\newcommand{\bc}[1]{\begin{cases}#1\end{cases}}
+\newcommand{\bcenter}[1]{\begin{center}#1\end{center}}
+\newcommand{\bef}[2][0pt]{\begin{fleqn}[#1]#2\end{fleqn}}
+\newcommand{\eq}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\li}[3][例]{
+	#1：#2\\ 
+	\phantom{#1：}\begin{minipage}[t]{0.9\linewidth}%注意这里phantom和minipage之间不能换行
+	\setlength\parskip{12pt}
+	\setlength{\belowdisplayskip}{0pt}%公式后的距离
+	\setlength{\abovedisplayskip}{0pt}%公式前的距离
+	\setlength{\belowdisplayshortskip}{0pt}%如果公式后的句子很短，将被采用[只对equation环境有效]
+	\setlength{\abovedisplayshortskip}{0pt}%如果公式前的句子很短，将被采用	[只对equation环境有效]
+	#3
+	\end{minipage}
+	\oneline}
+\newcommand{\sune}{\parbox{1em}{$ \Rightarrow $\\ [-10pt] $ \nLeftarrow $}} % Sufficiently unnecessary
+\newcommand{\usne}{\parbox{1em}{$ \nRightarrow $\\ [-10pt] $ \Leftarrow $}} % unsufficiently necessary
+\newcommand{\paint}[2][red]{{\color{#1}#2}} %着色
+\newcommand{\VV}[1]{\Vert #1 \Vert}
+
+\begin{document}
+% 必须在正文区设置
+\setlength{\belowdisplayskip}{6pt}%公式后的距离
+\setlength{\abovedisplayskip}{6pt}%公式前的距离
+\setlength{\belowdisplayshortskip}{0pt}%如果公式后的句子很短，将被采用[只对equation环境有效]
+\setlength{\abovedisplayshortskip}{0pt}%如果公式前的句子很短，将被采用	[只对equation环境有效]
+
+\hrule height 4pt
+\begin{Large}
+	\textbf{Essence of the lecture (29)}\\
+\end{Large}
+\begin{large}
+	\textbf{凸问题：} 
+\end{large}
+\vspace{-16pt}
+\begin{itemize} \setlength{\itemsep}{0pt}
+	% 使用\displaystyle来解决行内时bigcap变形
+	\item lagrangian function, lagrange dual function
+\end{itemize}
+% 设置hrule的宽度为4pt
+\hrule height 4pt
+
+\textbf{Lagrangian function/Lagrangian: }$ L(x,\lambda,\upsilon)=f_0(x)+\sum_{i=1}^{m}\lambda_i f_i(x)+\sum_{i=1}^{p}\upsilon_ih_i(x) $
+
+\textbf{Lagrange dual function/Dual function: }$ g(\lambda,\upsilon)=\inf\limits_{x\in D}L(x,\lambda,\upsilon) $
+
+\textbf{两条结论：}\\
+1）$ g(\lambda,\upsilon) $一定是凹函数，因为$ \sup_{x\in D}L(x,\lambda,\upsilon) $是凸函数（分段极大，保凸操作）\\
+2）$ \forall \lambda\geq 0,\ \forall \upsilon,\ g(\lambda,\upsilon)\leq p^*$，其中$ p^* $为原问题的最优值\\
+\phantom{2）}证明：设$ x^* $为原问题的最优解，则$ f_i(x^*)\leq 0,\ h_i(x^*)=0$\\
+\phantom{2）}回代有$ L(x^*,\lambda,\upsilon)=f_0(x^*)+\sum_{i=1}^{m}\lambda_i f_i(x^*)+\sum_{i=1}^{p}\upsilon_ih_i(x^*)\leq f_0(x^*)=p^*$
+
+\li{$\min\ c^Tx\quad s.t.\ Ax=b,\ x\geq0$}{
+	首先列出其拉格朗日方程
+	\begin{fleqn}
+		\begin{align*}
+			L(x,\lambda,\upsilon)&=c^Tx+\lambda^T(-x)+\upsilon^T(Ax-b)\\
+			&=(c^T-\lambda^T+\upsilon^TA)x-\upsilon^Tb\\
+			g(\lambda,\upsilon)&=\inf_{x\in D}L(x,\lambda,\upsilon)=
+			\bc{-b^T\upsilon\quad &A^T\upsilon-\lambda+c=0\\-\infty\quad &otherwise}
+		\end{align*}
+	\end{fleqn}
+}
+
+\li{$\min\ X^TWX\quad s.t.\ x_i=\pm 1,\ i=1,\dots,m$ }{
+	该例中目标函数不一定是凸函数，同时约束条件不是凸集，首先将约束项化为$ x_i^2=1 $
+}
+
+
+\end{document}

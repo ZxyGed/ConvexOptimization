@@ -1,0 +1,261 @@
+\documentclass[11pt]{ctexart}         %编辑中文文档
+\usepackage{amsmath,amsfonts,amssymb} %数学工具包
+\usepackage[margin=1in]{geometry}     %页面设置，边距，页幅大小等
+\usepackage{enumerate}                %有序列表工具包
+%\usepackage{hyperref}                 %方便设置超链接
+\usepackage{fancyhdr}                 %设置页眉页脚
+\usepackage{float}                    %设置图片环绕样式
+\usepackage{graphicx}                 %插入图片
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{adjustbox}
+
+
+\CTEXsetup[format={\Large\bfseries}]{section} %设置section标题左对齐，挺迷的
+\usepackage[
+	pdfstartview=FitH,
+	CJKbookmarks=true,
+	bookmarksnumbered=true,
+	bookmarksopen=true,
+	colorlinks,
+	pdfborder=001,
+	linkcolor=blue,
+	anchorcolor=blue,
+	citecolor=blue,
+]{hyperref}
+\hypersetup{hidelinks} %去除目录项以及超链接的方框
+
+\pagestyle{fancy}                     %设置页眉页脚
+\fancyhead{}                          %清除默认页眉
+\fancyfoot{}                          %清除默认页脚
+\fancyhead[L]{\slshape{Convex Optimization}}%设置自定义页眉左侧，slshape表斜体	
+\fancyhead[R]{\slshape Chapter2 Convex Sets}	
+\fancyfoot[C]{\thepage}
+\parindent 0ex %latex首段不缩进，其后段落缩进，\parindent为其后段落缩进的长度
+\setlength{\parskip}{1em}  %段落间距
+\renewcommand{\baselinestretch}{1.5}  %设置行距
+\renewcommand{\vec}[1]{\boldsymbol{#1}}  %设置粗体向量
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}%表格内换行
+
+\begin{document}
+\hrule height 4pt
+\begin{Large}
+	\textbf{Essence of the lecture (3/4)}
+\end{Large}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+	\hline
+	仿射集 & 凸集 & 凸锥 \\
+	\hline
+	%需要将公式内换行写为两条公式，否则tabincell会报错（但是效果是对的）
+	\tabincell{c}{$\theta_1+\dots+\theta_k=1$\\ $\theta_1,\dots,\theta_k\in R$} & 
+	\tabincell{c}{$\theta_1+\dots+\theta_k=1$\\ $\theta_1,\dots,\theta_k\in [0,1]$} & 
+	$\theta_1,\dots,\theta_k \geq 0$\\
+	\hline
+\end{tabular}
+\begin{align*}
+	%单数列左对齐，奇数列右对齐，第二列空掉，使得两列都为左对齐
+	&\text{直线：}&&\text{线段：}\\
+	&x_1\neq x_2 \in R^n,\ \theta\in R  &&\theta\in R,\ \theta\in[0,1] \\ 
+	&y=\theta x_1+(1-\theta)x_2  &&y=\theta x_1+(1-\theta)x_2 
+\end{align*}
+\end{center}
+% 设置hrule的宽度为4pt
+\hrule height 4pt
+
+\textbf{仿射集（Affine Sets）：}若$\forall x_1,x_2\in C$，则连接$x_1,x_2$的{\color{red}\textbf{直线}}也在集合内\\
+\phantom{仿射集（Affine Sets）：}$\Rightarrow$因此直线是仿射集，而线段不是
+
+\textbf{仿射组合：}设$x_1,\dots,x_k\in C,\ \theta_1,\dots,\theta_k\in R,\theta_1+\dots+\theta_k=1,\ \theta_1x_1+\dots+\theta_kx_k$称为仿射组合\\
+\phantom{仿射组合：}$\Rightarrow$若C为仿射集，则仿射组合也在C内，证明如下
+\begin{align*}
+	& \frac{\theta_1}{\theta_1+\theta_2}x_1+\frac{\theta_2}{\theta_1+\theta_2}x_2\in C\\
+	& (\theta_1+\theta_2)\left(\frac{\theta_1}{\theta_1+\theta_2}x_1+\frac{\theta_2}{\theta_1+\theta_2}x_2\right)+(1-\theta_1-\theta_2)x_3\in C\\
+	&\Leftrightarrow\theta_1 x_1+\theta_2 x_2+\theta_3 x_3 \in C,\quad \theta_1+\theta_2+\theta_3=1
+\end{align*}
+\textbf{仿射包：}对任意集合C，仿射包$(aff\ C)$是包含C的最小仿射集，
+$$aff\ C=\{\theta_1x_1+\dots+\theta_kx_k|\forall x_1,\dots,x_k\in C,\theta_1+\dots+\theta_k=1\}$$
+\hrulefill%注意使用的是hrulefill，在tabular外不能使用hline，否则会报错
+
+$V=C-x_0=\{x-x_0|x\in C\}\ \forall x_0\in C\Rightarrow$\textbf{与C相关的子空间}，即将C平移经过原点\\
+求证：$v_1,\ v_2\in V,\forall \alpha,\beta\in R\quad \alpha v_1+\beta v_2\in V$\\
+即证：$\alpha v_1+\beta v_2+x_0\in C\Longleftrightarrow \alpha (v_1+x_0)+\beta (v_2+x_0)+(1-\alpha-\beta)x_0\in C$\\ 
+\phantom{即证：}由于$v_1+x_0,\ v_2+x_0,\ x_0\in C$，得证
+
+线性方程组的解集是仿射集\\
+证明：$C=\{x|Ax=b\},\ A\in R^{m\times n},\ b\in R^m,\ x\in R^n$\\
+\phantom{证明：}由$Ax_1=b,\ Ax_2=b$有$\theta x_1+(1-\theta)x_2\in C$
+
+\hrulefill
+
+\textbf{凸集：}一个集合为凸集，当且仅当任意两点的{\color{red}\textbf{线段}}在C内\\
+\phantom{凸集：}即$\forall x_1,x_2\in C,\ \forall \theta\in [0,1],\ \theta x_1+(1-\theta)x_2\in C$
+
+\textbf{凸组合：}$x_1,\dots,x_k\in C,\ \theta_1,\dots,\theta_k\in [0,1],\ \theta_1+\dots+\theta_k=1,\ \theta_1x_1+\dots+\theta_kx_k$\\
+\phantom{凸组合：}凸集包含其任意元素的凸组合
+
+\textbf{凸包：} $Conv(C)=\{\theta_1x_1+\dots+\theta_kx_k|x_1,\dots,x_k\in C,、 \theta_1,\dots,\theta_k\in [0,1],\ \theta_1+\dots+\theta_k=1\}$\\
+\phantom{凸包：}即对任意集合C，包含C的最小凸集
+
+\textbf{锥：}$\forall x\in C,\ \theta\geq 0\Rightarrow \theta x\in C$
+
+\textbf{凸锥：}$\forall x_1,x_2\in C,\ \theta_1,\theta_2\geq 0\Rightarrow \theta_1x_1+\theta_2x_2\in C$
+
+\textbf{凸锥组合：}$\theta_1x_1+\dots+\theta_kx_k,\ \theta_1,\dots,\theta_k\geq 0$
+
+\textbf{凸锥包：}$\{\theta_1x_1+\dots+\theta_kx_k|x_1,\dots,x_k\in C, \theta_1,\dots,\theta_k\geq 0\}$
+
+\vspace{16pt}
+
+\adjustbox{minipage=\textwidth,cfbox=red}{仿射集一定是凸集，凸锥一定是凸集；\\空集既是仿射集，又是凸集，又是凸锥；\\
+	只有一个元素的集合一定是仿射集和凸集，是否是凸集，取决于该元素是否为原点（因为凸锥一定过原点）}
+
+
+\newpage
+\hrule height 4pt
+\begin{Large}
+	\textbf{Essence of the lecture (5/6)}\\
+\end{Large}
+\begin{large}
+	\textbf{几种重要的凸集：} 
+\end{large}
+\vspace{-16pt}
+\begin{itemize} \setlength{\itemsep}{0pt}
+	\item $R^n$空间，$R^n$空间的子空间
+	\item 任意直线（若过原点也为凸锥），任意线段，射线$\{x_0+\theta v|\theta\geq 0,\ x\in R^n,\ \theta\in R,\ v\in R^n\}$ 
+	\item 超平面与半空间
+	\item 球和椭球
+	\item 多面体（Polyhedron）和单纯形（Simplex）
+	\item 对称矩阵集合，对称半正定矩阵集合，对称正定矩阵集合
+\end{itemize}
+\hrule height 4pt
+
+\textbf{超平面：}$\{x\mid a^Tx=b\}$，凸集，仿射集，是否过原点（凸锥）
+
+\textbf{半空间：}超平面的衍生概念，$\{x\mid a^T\geq b\},\ \{x\mid a^Tx\leq b\}$，凸集，非仿射集，是否过原点（凸锥）
+
+\textbf{球：}$B(x_c,r)=\{x\mid \Vert x-x_c\Vert_2\leq r\}=\{x\mid \sqrt{(x-x_c)^T(x-x_c)}\leq r\}$为凸集\\
+证明：$\forall \theta\in[0,1]$，取$f(x)=\Vert x-x_c\Vert_2$\\
+\phantom{证明：}$\Vert \theta x_1+(1-\theta)x_2-x_c\Vert_2=\Vert \theta (x_1-x_c)+(1-\theta)(x_2-x_c)\Vert_2$\\
+\phantom{证明：}$\leq\ \theta\Vert x_1-x_c\Vert_2+(1-\theta)\Vert x_2-x_c\Vert_2$\\
+\phantom{证明：}\textcolor{red}{这里主要利用了三角不等式（范数的条件2）}，$\Vert a\Vert+\Vert b\Vert\geq \Vert a+b\Vert$
+
+\textbf{椭球：}$\varepsilon(x_c,P)=\{x\mid (x-x_c)^TP^{-1}(x-x_c)\leq 1\},\ x_c\in R^n,\ P\in S_{++}^n$\\
+\phantom{椭球：}其中P为对角矩阵，对角线上为矩阵的奇异值的平方，矩阵的奇异值对应了椭球的半轴长\\
+\phantom{椭球：}矩阵A的奇异值为$\sqrt{eig(A^TA)}$，需要注意方针的特征值和奇异值也可能不等
+
+\textbf{多面体（polyhedron）：}$\{x\mid a_j^Tx\leq b_j,\ j=1,\dots,m,\ c_j^T=d_j,\ j=1,\dots,p\}$\\
+可以看作半空间和超平面的交集，所以是凸集
+
+\textbf{单纯形：}$R^n$中选择$v_0,\dots,v_k$共$k+1$个点，使$v_1-v_0,\dots,v_k-v_0$线性无关，则与上述点相关的单纯形为$C=Conv\{v_0,\dots,v_k\}=\{\theta_0v_0+\dots+\theta_kv_k\mid \theta\geq 0,1^T\theta =1\}$，即找到这k个点的凸包
+
+注意$\{x\mid x\leq 0\}$是凸集/多面体/单纯形，即一维空间下取$x_1=0,\ x_2=-\infty$的凸包
+
+\pagebreak
+求证：单纯形是多面体的一种\\
+证明：定义$y=[\theta_1,\dots,\theta_k],\ y\geq 0,\ 1^Ty\leq 1$(注意舍弃了$\theta_0$)，$B=[v_1-v_0,\dots,v_k-v_0]\in R^{n\times k}$\\
+\phantom{证明：}$x\in C\Leftarrow x=\theta_0v_0+\dots+\theta_kv_k=v_0+\theta_1(v_1-v_0)+\dots+\theta_k(v_k-v_0)=v_0+By$\\[8pt]
+\phantom{证明：}B满秩，$rank(B)=k\Rightarrow$通过非奇异(可逆)矩阵$A=\left[\begin{array}{c}A_1\\A_2\end{array}\right]\in R^{n\times n}$，$\left[\begin{array}{c}A_1\\A_2\end{array}\right]B=\left[\begin{array}{c}I_k\\0\end{array}\right]$\\
+\phantom{证明：}$Ax=Av_0+ABy\Rightarrow\left[\begin{array}{c}A_1\\A_2\end{array}\right]x=\left[\begin{array}{c}A_1\\A_2\end{array}\right]v_0+\left[\begin{array}{c}I_k\\0\end{array}\right]y$\\[8pt]
+\phantom{证明：}利用$y\geq 0,\ 1^Ty\leq 1$，有$A_1x\geq A_1v_0,\ 1^TA_1x\leq 1^TAv_0+1$\\
+\phantom{证明：}则单纯形中的x可以表示为$\{x\mid A_1x\geq A_1v_0,\ 1^TA_1x\leq 1^TAv_0+1,A_2x=A_2v_0\}$
+
+\textbf{对称矩阵集合：}$S^n=\{x\in R^{n\times n}\mid X=X^T\}$
+
+\textbf{对称半正定矩阵集合：}$S^n_{+}=\{x\in R^{n\times n}\mid X=X^T,\ X\succeq 0\}$
+
+\textbf{对称正定矩阵集合：}$S^n_{++}=\{x\in R^{n\times n}\mid X=X^T,\ X\succ 0\}$
+
+求证：$S_+^n$是凸锥
+证明：$\forall \theta_0,\theta_1\geq 0,\ \forall A,B\in S_+^n$，对于$\theta_1A+\theta_2B$，首先对称性显然成立\\
+\phantom{证明：}$\forall x\in R^n,\ X^TAX\geq 0,\ X^TBX\geq 0,\ \theta_1X^TAX+\theta_2X^TBX\geq 0$，$\theta_1A+\theta_2B\succ 0$，得证
+
+求证：$S_{++}^n$不是凸锥\\
+证明：首先考虑n=1的情况，不过原点\\
+\phantom{证明：}高维情况下$\theta_1X^TAX+\theta_2X^TBX\geq 0\notin S^n_{++}$，因为$\theta_1,\theta_2$可同时为0
+
+\newpage
+\hrule height 4pt
+\begin{Large}
+	\textbf{Essence of the lecture (7/8)}\\
+\end{Large}
+\begin{large}
+	\textbf{几种重要的保凸运算：} 
+\end{large}
+\vspace{-16pt}
+\begin{itemize} \setlength{\itemsep}{0pt}
+	% 使用\displaystyle来解决行内时bigcap变形
+	\item 凸集的交操作
+	\item 仿射变换（缩放与位移，线性矩阵不等式）
+	\item 透视函数
+	\item 线性分数函数（仿射和透视的融合）
+\end{itemize}
+\hrule height 4pt
+
+\textbf{交集：}若$S_0$为凸集，$\forall a\in A$，则$\displaystyle\bigcap_{a\in A}S_a$为凸集
+
+\textbf{仿射函数：}$f:R^n\to R^m$是仿射的({\color{red}线性映射})，当{\color{red}$f=Ax+b$}$,\ A\in R^{m\times n},\ b\in R^m$\\
+\phantom{仿射函数：}若$S\in R^n$为凸，则$f(S)=\{f(x)\mid x\in S\}$为凸
+
+\textbf{缩放与位移：}$\alpha S=\{\alpha x\mid x\in S\}\qquad S+a=\{x+a\mid x\in S\}$
+
+求证：两个凸集的和仍旧是凸集，定义凸集的和为($S_1+S_2=\{x+y\mid x\in S_1,\ y\in S_2\}$)\\
+证明：因为仿射映射是从一个集合的角度应用的，所以要将两个集合融合为一个\\
+\phantom{证明：}定义$S_1\times S_2=\{(x,y)\mid x\in S_1,\ y\in S_2\}$，由凸集定义显然这是一个凸集\\
+\phantom{证明：}则令$f(x,y)=x+y$，有$S_1+S_2=f(S_1\times S_2)$，由仿射变换保凸知，凸集和仍为凸集
+
+\textbf{线性矩阵不等性（LMI）：}$A(x)=x_1A_1+\dots+x_nA_n\preceq B,\ B,\ A_i,\ x_i\in S^m$\\
+求证：LMI的解为凸集，即$\{x\mid A(x)\preceq B\}$为凸集\\
+证明：定义仿射变换$f(x)\triangleq B-A(x)$，注意$f(x)$中的$x=[A_1,A_2,\dots,A_n]$，是多个矩阵，\\
+\phantom{证明：}而$B-A(x)$返回的是一个矩阵，$f$是从高维向低维的一个映射\\
+\phantom{证明：}由$S_+^n$为凸，所以$f^{-1}(S_+^n)=\{x\mid B-A(x)\succeq 0\}\Leftrightarrow\{x\mid A(x)\preceq B\}$为凸，得证
+
+求证：椭球是球的仿射映射\\
+证明：椭球：$\epsilon=\{x\mid (x-x_c)^Tp^{-1}(x-x_c)\leq 1\},\ p\in S_{++}^m$，单位球：$\{u\mid \Vert u\Vert_2\leq 1\}$\\
+\phantom{证明：}定义$f(u)=p^{\frac{1}{2}}u+x_c$，则$\{f(u)\mid \Vert u\Vert_2\leq 1\}=\{p^{\frac{1}{2}}u+x_c\mid \Vert u\Vert_2\leq 1\}$\\
+\phantom{证明：}令$x\triangleq p^{\frac{1}{2}}u+x_c\Rightarrow u=p^{-\frac{1}{2}}(x-x_c)$（由于$p\in S_{++}^m$，p可以求逆）\\
+\phantom{证明：}回代得$\{x\mid \Vert p^{-\frac{1}{2}}(x-x_c)\Vert_2\leq 1\}=\{x\mid (x-x_c)^Tp^{-1}(x-x_c)\leq 1\}$
+
+\textbf{透视函数（perspective function）：}$P:\ R^{n+1}\to {R^n}$，$dom\ P:\ R^n\times R_{++}$\\$P(z,t)=\frac{z}{t},\ z\in R^n,\ t\in R_{++}$，凸集通过透视变换仍为凸集
+
+考虑$R^n$内的线段，$x=(\tilde{x},x_{n+1}),\ y=(\tilde{y},y_{n+1}),\ \tilde{x},\tilde{y}\in R^n,\,x_{n+1},y_{n+1}\in R_{++},\,\theta\geq 0$，线段为$\theta x+(1-\theta) y$\\
+求证：任意线段通过透视函数后仍为凸集\\
+证明：P是透视函数，证明如下
+\begin{align*}
+	P(\theta x+(1-\theta) y)
+	&=\frac{\theta \tilde{x}+(1-\theta)\tilde{y}}{\theta x_{n+1}+(1-\theta)y_{n+1}}\\
+	&=\frac{\theta x_{n+1}}{\theta x_{n+1}+(1-\theta)y_{n+1}}\frac{\tilde{x}}{x_{n+1}}+\frac{(1-\theta) y_{n+1}}{\theta x_{n+1}+(1-\theta)y_{n+1}}\frac{\tilde{y}}{y_{n+1}}\\
+	&=\mu P(x)+(1-\mu)P(y)
+\end{align*}
+
+求证：任意凸集的反透视映射仍为凸集，即$P^{-1}(C)=\{(x,t)\in R^{n+1}\mid \frac{x}{t}\in C,\ t>0\}$\\
+证明：考虑该该反透视映射集合中的两点$(x,t)\in P^{-1}(C),\ (y,s)\in P^{-1}(C),\ 0\leq \theta\leq 1$\\
+\phantom{证明：}即证：$P(\theta (x,t)+(1-\theta)(y,s))\in C$
+\begin{align*}
+	\text{原式}&=\frac{\theta x+(1-\theta)y}{\theta t+(1-\theta)s}\in C\\
+	&=\frac{\theta t}{\theta t+(1-\theta s)}\frac{x}{t}+(1-\frac{\theta t}{\theta t+(1-\theta s)}\frac{x}{t})\frac{y}{s}\in C
+\end{align*}
+
+\textbf{线性分数函数：}仿射映射和透视映射的结合\\ [6pt]
+$\delta:\ R^n\to R^{m+1}$为仿射映射，$\delta(x)=\left[\begin{array}{c}
+	A \\
+	C^T
+\end{array}
+\right]x+\left[\begin{array}{c}
+	b \\
+	d
+\end{array}
+\right]$，$A\in R^{m\times n},b\in R^m,C\in R^n,d\in R$\\ [6pt]
+$P:\ R^{m+1}\to R^m$，线性分数函数$f:\ R^n\rightarrow R^m\triangleq P\circ \delta$\\ [6pt]
+$f(x)=\displaystyle\frac{Ax+b}{cx+d},\ dom f=\{x\mid c^Tx+d>0\}$\\ [6pt]
+经过2次保凸运算后，结果仍为凸集，即线性分数函数保凸。\\
+其一定是拟凸函数，但不一定是凸函数，具体见$\alpha$-sublevel set(17/18)
+
+求证：两个随机变量（$u\in \{1,2,\dots,n\},\ v\in\{1,2,\dots,m\}$）的联合概率$\to$条件概率保凸\\
+证明：$P_{ij}=P(u=i,v=j),\ f_{ij}=P(u=i\mid v=j)\Rightarrow f_{ij}=\displaystyle\frac{P_{ij}}{\sum_{k=1}^nP_{kj}}$\\
+\phantom{证明：}这是一个线性分数函数，x是$[P_{1j},\dots,P_{nj}]$，分子由$[0,\dots,1,\dots,0]$点乘x，\\
+\phantom{证明：}分母由1向量点乘得来，因此该映射是一个保凸的映射。
+
+
+
+\end{document}
